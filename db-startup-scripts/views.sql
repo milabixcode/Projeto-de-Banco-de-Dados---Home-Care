@@ -1,3 +1,4 @@
+--View que exibe os compromissos entre pacientes e profissionais
 create or replace
 view compromissos_profissionais as (
 select
@@ -27,6 +28,7 @@ inner join paciente on
 	paciente.idpaciente = plantao.idpaciente
 );
 
+-- View que exibe informações de dieta mais recente dos pacientes
 create or replace
 view dietas_dos_pacientes as (
 select

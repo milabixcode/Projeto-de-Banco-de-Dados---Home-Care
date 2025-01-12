@@ -1,4 +1,5 @@
-
+--Procedure que desmarca consultas futuras
+--Precisa ser chamada diretamente por triggers ou usando call e não retorna nada
 create or replace procedure desmarca_consultas_futuras() as $$
 begin
     update consulta
@@ -11,6 +12,8 @@ call desmarca_consultas_futuras();
 
 -------------------
 
+--Function que formata endereço para string
+--Pode ser usada em uma consulta
 create or replace function endereco_completo(endereco endereco) returns text as $$
 begin
     return format('%s, Numero %s - %s, %s - %s (%s)', endereco.rua, endereco.numero, endereco.bairro, endereco.cidade, endereco.uf, endereco.cep);
@@ -21,6 +24,7 @@ select endereco_completo(endereco) from endereco;
 
 -------------------
 
+--Abrevia o nome completo. Ex: Maria Silva de Oliveira -> M. S. Oliveira
 create or replace function abrevia_nome(nome text) returns text as $$
 declare
     nome_abreviado text;
@@ -47,6 +51,7 @@ select abrevia_nome(nome) from paciente p;
 
 -------------------
 
+
 create or replace function resume_prescricao(id_prescricao int) returns text as $$
 declare
     procedimentos text := '';
@@ -54,6 +59,7 @@ declare
     dietas text := '';
 begin
     -- Resumir procedimentos
+    -- Dado um id de prescrição ele concatena todos os nomes de procedimentos associados
     select string_agg(nomeproced, ', ') into procedimentos
     from procedimentos p
     join prescricao_procedimento pp on p.idprocedimento = pp.idprocedimento
@@ -79,6 +85,7 @@ select resume_prescricao(idprescricao) from prescricao;
 
 -------------------
 
+-- Procedure que desmarca plantões e consultas de um profissional ausente dentro do período informado
 create or replace procedure profissional_ausente(numregistroprof int, data_inicio timestamp, data_fim timestamp) as $$
 begin
     update plantao
