@@ -1,4 +1,5 @@
--- Função usada por um trigger que valida se o conselho bate com a profissão
+--Função usada por um trigger que valida se um profissional está vinculado ao conselho correto 
+--para sua profissão no momento de uma inserção 
 create or replace
 function valida_profissional_conselho()
 returns trigger as $$
@@ -21,12 +22,8 @@ $$ language plpgsql;
 -- Trigger que executa a validação antes do insert ou update na tabela profissional
 create or replace
 trigger valida_profissional_conselho
-before
-insert
-	or
-update
-	on
-	profissional
+before insert or update
+on profissional
 for each row
 execute function valida_profissional_conselho();
 
@@ -79,11 +76,7 @@ $$ language plpgsql;
 -- Trigger pra garantir que uma vacina vencida nao é mais usada em novos procedimentos
 create or replace
 trigger valida_vacina_vencida
-before
-insert
-	or
-update
-	on
-	Procedimento_Vacina
+before insert or update
+on Procedimento_Vacina
 for each row
 execute function valida_vacina_vencida_em_procedimento();

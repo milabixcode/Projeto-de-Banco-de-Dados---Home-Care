@@ -13,6 +13,8 @@ call desmarca_consultas_futuras();
 -------------------
 
 --Function que formata endereço para string
+--Para cada linha da tabela endereco, a função endereco_completo é chamada, passando o valor da linha inteira como argumento (que é do tipo composto).
+A função retorna o endereço formatado como uma string.
 --Pode ser usada em uma consulta
 create or replace function endereco_completo(endereco endereco) returns text as $$
 begin
