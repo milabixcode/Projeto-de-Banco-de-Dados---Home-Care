@@ -1,14 +1,22 @@
 --Procedure que desmarca consultas futuras
 --Precisa ser chamada diretamente por triggers ou usando call e não retorna nada
-create or replace procedure desmarca_consultas_futuras() as $$
+create or replace procedure remarca_consultas_futuras(data_atual date, nova_data date) as $$
 begin
     update consulta
-	set data = null
-    where data > now();
+    set 
+        data = case 
+                  when nova_data is null then null
+                  else nova_data
+              end,
+        status = case 
+                    when nova_data is null then 'desmarcado'
+                    else 'remarcado'
+                 end
+    where data = data_atual;
 end;
 $$ language plpgsql;
 
-call desmarca_consultas_futuras();
+call remarca_consultas_futuras('2025-01-14', '2025-01-20');
 
 -------------------
 
